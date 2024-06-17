@@ -3,12 +3,19 @@ import time
 from .functions import functions_ark as ark
 import os
 import subprocess
+import sys
 
 ark.log_it(f'Started {os.path.basename(__file__)}')
 
-ark_path = "C:/Program Files/Google/Play Games"
-os.chdir(ark_path)
-subprocess.Popen(["Bootstrapper.exe"])
+ark_path = ark.find_google_play_games_path()
+if ark_path:
+    os.chdir(ark_path)
+    subprocess.Popen(["Bootstrapper.exe"])
+else:
+    print("Google Play Games installation path not found.")
+    input()
+    sys.exit()
+    
 time.sleep(15)
 
 ark.action_start('Google Play', 1750, 900, 85, 120)
