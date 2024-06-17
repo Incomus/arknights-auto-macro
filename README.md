@@ -19,4 +19,4 @@ I'm running 2 tc, 4 fac, 3 pp.
 ## To Do
 - Somehow make PowerToys more consistent and code it to search for operators when filling work. That would bypass the need to be precise with operator picking, allow to make second shift and ignore more operators joining roster and messing up macro spacing.
 - Merge 0_start and 1_start.
-- Make the whole thing more modular, so one doesn't have to code it from scratch to do anything.
+- Make the whole thing more modular, so one doesn't have to code from scratch to do anything.
