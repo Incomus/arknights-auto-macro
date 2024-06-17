@@ -3,6 +3,7 @@ Does laundry (and recruit too)
 
 Macro Recorder demands 200+ evergreens a year for a handful of variables, so I'm ditching it. God bless ChatGPT.
 ## Requirements
+- Google Play Games beta for PC
 - Windows PowerToys (text extractor, win+shift+t)
 - OBS (to track progress and errors in execution, not necessary)
 
