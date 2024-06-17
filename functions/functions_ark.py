@@ -63,6 +63,12 @@ def comb_tags(tags, operators_data, input_tags, debug=False, manual=True):
                             break
                         if tag1_index == 0 and \
                                 tag2_index == 1 and \
+                                input_tags[tag3_index] == 28 and \
+                                manual == True:
+                                log_it("Recruitment manual senior op!")
+                                raise ValueError('manual senior op')
+                        if tag1_index == 0 and \
+                                tag2_index == 1 and \
                                 input_tags[tag3_index] == 29:
                             if debug == True:
                                 print(f'skipped {print_tags}: skip single top op')
