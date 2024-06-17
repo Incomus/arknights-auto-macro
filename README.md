@@ -1,5 +1,6 @@
 # arknights-macro
 Does laundry (and recruit too)
+
 Macro Recorder demands 200+ evergreen stones a year for a handful of variables, so I'm ditching it. God bless ChatGPT.
 ## Requirements
 - Windows PowerToys (text extractor, win+shift+t)
