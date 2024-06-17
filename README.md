@@ -4,7 +4,7 @@ Does laundry (and recruit too)
 Macro Recorder demands 200+ evergreen stones a year for a handful of variables, so I'm ditching it. God bless ChatGPT.
 ## Requirements
 - Windows PowerToys (text extractor, win+shift+t)
-- OBS (to track progress and errors in execution)
+- OBS (to track progress and errors in execution, not necessary)
 
 I'm running 2 tc, 4 fac, 3 pp.
 ## DIY
