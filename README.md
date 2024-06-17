@@ -9,7 +9,7 @@ Macro Recorder demands 200+ evergreen stones a year for a handful of variables, 
 I'm running 2 tc, 4 fac, 3 pp.
 ## DIY
 - Set up your own base work team in 'game\base\work_2traders.py' (I switch back and forth between 1 and 2 tc over time). There is no convenient way to filter operators in game by name, so good luck with that. I had to create quite a workaround to get Siege in trade post.
-- Make your own script for farming in 'game\farm\' and add it to '1_start.py' (don't remember exactly why I made 0_start and 1_start separate, whatever).
+- Make your own script for farming in 'game\farm\\' and add it to '1_start.py' (don't remember exactly why I made 0_start and 1_start separate, whatever).
 - I set the whole thing up to wake up PC using some kind of wake script, I tried to implement it using Python but it didn't work and I don't want to fix it so I used Macro Recorder again. Just set it up with Windows Task Scheduler, it should work. Execution of 0_start bat files is dependant on schedule:
   - '0_start_work_out.bat' a normal run, will clear the whole base of workers, except office, where I have Whisperain with filled refreshes so she doesnt need to rest (might change it later as I didn't have enough rest room for her in previous iterations and I have now). In order to make consistency I recided in the end to not add new operators to work and just keep the base empry while the rest in ongoing. It reduces productivity by ~20% but adding them makes this a giant headache to set up. Especially if you happen to get a new operator, you need to redo the thing anyway, but with two shifts it becomes almost impossible to do so conveniently.
   - '0_start_rest.bat' 6 hours later it opens the game, adds new op's to rest and closes.
