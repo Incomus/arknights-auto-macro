@@ -335,3 +335,50 @@ def find_obs_path():
                 return root
 
     return None
+    
+def find_google_play_games_path():
+    # Check if an environment variable is set
+    google_play_games_path = os.getenv("GOOGLE_PLAY_GAMES_PATH")
+    if google_play_games_path:
+        return google_play_games_path
+
+    # Search the Windows Registry
+    try:
+        with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall") as key:
+            for i in range(0, winreg.QueryInfoKey(key)[0]):
+                subkey_name = winreg.EnumKey(key, i)
+                with winreg.OpenKey(key, subkey_name) as subkey:
+                    try:
+                        name = winreg.QueryValueEx(subkey, "DisplayName")[0]
+                        if "Google Play Games" in name:
+                            install_location = winreg.QueryValueEx(subkey, "InstallLocation")[0]
+                            if validate_google_play_games_path(install_location):
+                                return install_location
+                    except FileNotFoundError:
+                        continue
+    except Exception as e:
+        print(f"Error accessing registry: {e}")
+
+    # Search common installation directories
+    common_install_dirs = [r"C:\Program Files", r"C:\Program Files (x86)"]
+    for start_dir in common_install_dirs:
+        for root, dirs, files in os.walk(start_dir):
+            if "Bootstrapper.exe" in files:
+                if validate_google_play_games_path(root):
+                    return root
+
+    return None
+
+def validate_google_play_games_path(path):
+    # Check for specific files and directories unique to Google Play Games
+    expected_items = [
+        "Bootstrapper.exe",
+        "uninstaller.exe",
+        os.path.join("current", "client", "client.exe")
+    ]
+    for item in expected_items:
+        if not os.path.exists(os.path.join(path, item)):
+            return False
+    return True
+
+
