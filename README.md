@@ -1,12 +1,13 @@
 # arknights-macro
 Does laundry (and recruit too)
 
-Macro Recorder demands 200+ evergreen stones a year for a handful of variables, so I'm ditching it. God bless ChatGPT.
+Macro Recorder demands 200+ evergreens a year for a handful of variables, so I'm ditching it. God bless ChatGPT.
 ## Requirements
 - Windows PowerToys (text extractor, win+shift+t)
 - OBS (to track progress and errors in execution, not necessary)
 
 I'm running 2 tc, 4 fac, 3 pp.
+Recruitment should ignore slots with 'Top Operator' and 'Robot' tags.
 ## DIY
 - Set up your own base work team in 'game\base\work_2traders.py' (I switch back and forth between 1 and 2 tc over time). There is no convenient way to filter operators in game by name, so good luck with that. I had to create quite a workaround to get Siege in trade post.
 - Make your own script for farming in 'game\farm\\' and add it to '1_start.py' (don't remember exactly why I made 0_start and 1_start separate, whatever).
