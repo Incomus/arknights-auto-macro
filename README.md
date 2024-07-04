@@ -11,7 +11,7 @@ I'm running 2 tc, 4 fac, 3 pp.
 
 Recruitment should ignore slots with 'Top Operator', 'Senior Operator' and 'Robot' tags.
 ## DIY
-- Set up your own base work team in 'game\base\pick.py' and json files in jsons\\ (I switch back and forth between 1 and 2 tc over time). There is no convenient way to filter operators in game by name, so good luck with that. I had to create quite a workaround to get Siege in trade post.
+- Set up your own base work team in 'game\base\pick.py', 'game\base\rest.py' and json files in jsons\\ (I switch back and forth between 1 and 2 tc over time). There is no convenient way to filter operators in game by name, so good luck with that. I had to create quite a workaround to get Siege in trade post.
 - Make your own script for farming in 'game\farm\\' and add it to '1_start.py' (don't remember exactly why I made 0_start and 1_start separate, whatever).
 - I set the whole thing up to wake up PC from hibernation using some kind of wake script, I tried to implement it using Python but it didn't work and I don't want to fix it so I used Macro Recorder again. Just set it up with Windows Task Scheduler, it should work. Execution of 0_start bat files is dependant on schedule:
   - '0_start_work_out.bat' a normal run, will clear the whole base of workers, except office, where I have Whisperain with filled refreshes so she doesnt need to rest (might change it later as I didn't have enough rest room for her in previous iterations and I have now). As I added a resemblance of consistency in picking operators, will soon add second shift.
