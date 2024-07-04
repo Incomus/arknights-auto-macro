@@ -66,7 +66,7 @@ def work_in():
     general_start()
     subprocess.run(["python", "-m", "ark.game.base.clear_rest"], env=env)
     tm.sleep(1)
-    subprocess.run(["python", "-m", "ark.game.base.pick_test"], env=env)
+    subprocess.run(["python", "-m", "ark.game.base.pick"], env=env)
     tm.sleep(1)
     subprocess.run(["python", "-m", "ark.game.base.drone_exp"], env=env)
     tm.sleep(1)
