@@ -17,7 +17,7 @@ Recruitment should ignore slots with 'Top Operator', 'Senior Operator' and 'Robo
   - '0_start_work_out.bat' a normal run, will clear the whole base of workers, except office, where I have Whisperain with filled refreshes so she doesnt need to rest (might change it later as I didn't have enough rest room for her in previous iterations and I have now). As I added a resemblance of consistency in picking operators, will soon add second shift.
   - '0_start_rest.bat' 6 hours later it opens the game, adds new op's to rest and closes.
   - '0_start_work_in.bat' a normal run, 6 more hours later it will clear dormitories, add workers and fill dormitories with placeholders (for Rosmontis)
-  - '0_start_work.bat' would just let it run and collect resources every 12 hours. With Mlynar and 3 smileys, I use a 2.5 day loop (4 smileys can give 3 day loop), so work_out --6 hours--> rest --6 hours--> work_in --12 hours--> work --12 hours--> work --12 hours--> work --12 hours--> work_out again
+  - '0_start_work.bat' would just let it run and collect resources every 12 hours. With Mlynar and 3 smileys, I use a 2.5 day loop (4 smileys can give 3 day loop), so work_out --6 hours--> rest --6 hours--> work_in --12 hours--> work --12 hours--> work --12 hours--> work --12 hours--> work_out again. I setup 1_start to run on 14:00 and 02:00. Fiddle with it a little to change activation time of certain actions.
 - Something else I didn't see coming because I'm not a god coder. God bless ChatGPT.
 ## To Do
 - ~Somehow make PowerToys more consistent and code it to search for operators when filling work. That would bypass the need to be precise with operator picking, allow to make second shift and ignore more operators joining roster and messing up macro spacing.~ done
