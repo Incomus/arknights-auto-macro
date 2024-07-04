@@ -5,16 +5,35 @@ import datetime
 import subprocess
 import sys
 
-ark.log_it(f'Started {os.path.basename(__file__)}')
 
 event = True
 if len(sys.argv) > 1:
     week_schedule = sys.argv[1]
+else:
+    week_schedule = '1'
+
+if week_schedule == '0':
+    text = 'work_in'
+
+if week_schedule == '1':
+    text = 'work'
+    
+if week_schedule == '2':
+    text = 'work_out'
+    
+if week_schedule == '3':
+    text = 'rest'
+    
+ark.log_it(f'Started {os.path.basename(__file__)}, {text}')
     
 env = os.environ.copy()
 env["PYTHONPATH"] = os.path.dirname(os.path.abspath(__file__))
 
 def general_start():
+    subprocess.run(["python", "-m", "arknights-auto-macro.record_start"], env=env)
+    tm.sleep(1)
+    subprocess.run(["python", "-m", "arknights-auto-macro.start"], env=env)
+    tm.sleep(1)
     subprocess.run(["python", "-m", "arknights-auto-macro.game.main.login"], env=env)
     tm.sleep(1)
     subprocess.run(["python", "-m", "arknights-auto-macro.game.main.get_recruit"], env=env)
@@ -59,8 +78,13 @@ def general_end():
         tm.sleep(1)
         subprocess.run(["python", "-m", "arknights-auto-macro.game.main.mission"], env=env)
         tm.sleep(1)
-    ark.log_it(f'Ended {os.path.basename(__file__)}')
-    sys.exit()
+    subprocess.run(["python", "-m", "arknights-auto-macro.stop"], env=env)
+    tm.sleep(1)
+    subprocess.run(["python", "-m", "arknights-auto-macro.record_stop"], env=env)
+    tm.sleep(1)
+    ark.log_it(f'Ended {os.path.basename(__file__)}, {text}')
+    tm.sleep(1)
+    subprocess.Popen(["python", "-m", "arknights-auto-macro.hibernate"], env=env)
 
 def work_in():
     general_start()
@@ -95,14 +119,23 @@ def work():
     general_end()
 
 def rest():
+    subprocess.run(["python", "-m", "arknights-auto-macro.record_start"], env=env)
+    tm.sleep(1)
+    subprocess.run(["python", "-m", "arknights-auto-macro.start"], env=env)
+    tm.sleep(1)
     subprocess.run(["python", "-m", "arknights-auto-macro.game.main.login"], env=env)
     tm.sleep(1)
     subprocess.run(["python", "-m", "arknights-auto-macro.game.base.enter"], env=env)
     tm.sleep(1)
     subprocess.run(["python", "-m", "arknights-auto-macro.game.base.rest"], env=env)
     tm.sleep(1)
-    ark.log_it(f'Ended {os.path.basename(__file__)}')
-    sys.exit()
+    subprocess.run(["python", "-m", "arknights-auto-macro.stop"], env=env)
+    tm.sleep(1)
+    subprocess.run(["python", "-m", "arknights-auto-macro.record_stop"], env=env)
+    tm.sleep(1)
+    ark.log_it(f'Ended {os.path.basename(__file__)}, {text}')
+    tm.sleep(1)
+    subprocess.Popen(["python", "-m", "arknights-auto-macro.hibernate"], env=env)
     
 
 if week_schedule == '0':
