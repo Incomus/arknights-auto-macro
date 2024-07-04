@@ -1,3 +1,3 @@
 @echo off
 cd /d "%~dp0..\.."
-python -m ark.0_start 3
+python -m arknights-auto-macro.0_start 3
