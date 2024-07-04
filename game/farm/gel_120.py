@@ -5,8 +5,15 @@ import os
 
 ark.log_it(f'Started {os.path.basename(__file__)}')
 
+ark.action_start('Arknights', 1242, 812, 339, 164)
 ark.resource_menu()
-
+ark.action_start('Arknights', 1242, 812, 339, 164)
+pyautogui.moveTo(724, 895)
+pyautogui.mouseDown()
+pyautogui.moveTo(724, 720, 1)
+time.sleep(.6)
+pyautogui.mouseUp()
+time.sleep(1)
 pyautogui.click(x=989, y=891)
 time.sleep(1)
 pyautogui.moveTo(724, 895)
@@ -18,9 +25,11 @@ time.sleep(1)
 pyautogui.click(x=852, y=777)
 time.sleep(10)
 
+ark.action_start('Arknights', 1242, 812, 339, 164)
 ark.start_farm()
 time.sleep(750)
 
+ark.action_start('Arknights', 1242, 812, 339, 164)
 ark.big_out()
 
 ark.log_it(f'Ended {os.path.basename(__file__)}')

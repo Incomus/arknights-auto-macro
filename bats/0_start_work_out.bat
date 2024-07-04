@@ -1,3 +1,3 @@
 @echo off
-cd /d "C:\Users\User\Desktop"
+cd /d "%~dp0..\.."
 python -m ark.0_start 2

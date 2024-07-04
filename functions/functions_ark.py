@@ -8,22 +8,74 @@ import keyboard
 import os
 from datetime import datetime
 import winreg
+import sys
+import win32gui
+import win32con
+import pywinauto
+
+class WindowMgr:
+    def __init__(self):
+        self._handle = None
+
+    def _window_enum_callback(self, hwnd, wildcard):
+        """Pass to win32gui.EnumWindows() to check all open windows"""
+        if wildcard in win32gui.GetWindowText(hwnd):
+            if win32gui.IsWindowVisible(hwnd) and not win32gui.GetParent(hwnd):
+                self._handle = hwnd
+
+    def find_window_wildcard(self, wildcard):
+        self._handle = None
+        win32gui.EnumWindows(self._window_enum_callback, wildcard)
+        if not self._handle:
+            raise Exception(f"No window found matching: {wildcard}")
+
+    def minimize_window(self):
+        if self._handle is not None and self._handle != 0:
+            win32gui.ShowWindow(self._handle, win32con.SW_MINIMIZE)
+        else:
+            raise Exception("Invalid window handle")
+
+    def close_window(self):
+        if self._handle is not None and self._handle != 0:
+            win32gui.PostMessage(self._handle, win32con.WM_CLOSE, 0, 0)
+        else:
+            raise Exception("Invalid window handle")
+
 
 def action_start(title, resize_x, resize_y, move_x, move_y):
-    w = pyautogui.getWindowsWithTitle(title)[0]
-    w.activate()
-    w.restore()
-    w.resizeTo(resize_x, resize_y)
-    w.moveTo(move_x, move_y)
-    time.sleep(.5)
-    return w
+    try:
+        app = pywinauto.Application().connect(found_index=0, title_re=title)
+        main_window = app.window(title_re=title)
+        main_window.set_focus()
+        time.sleep(.5)
+        w = WindowMgr() ##
+        w.find_window_wildcard(title) ##
+        win32gui.MoveWindow(w._handle, move_x, move_y, resize_x, resize_y, True)
+        time.sleep(.5)
+        return w
+    except Exception as e:
+        print(f"Error action_start: {title}, {e}")
+        log_it(f"Error action_start: {title}, {e}")
+        sys.exit()
+        
 
 def normalize(text):
     text = text.replace('\n', ',').replace('\r', ',').replace(',,', ',')
     text = text.split(',')
-    text = ["AoE" if x.lower() == "aoe" else x for x in text]
+    text = ["Mlynar" if "mkynar" in x.lower() else x for x in text]
+    try:
+        for element in text:
+            if element in ['', ' ']:
+                text.remove(element)
+    except:
+        x = None
     return text
 
+def normalize_tags(text):
+    text = ["Ranged" if x.lower() == "ringed" else x for x in text]
+    text = ['' if x in [' ', '•'] else x for x in text]
+    return text
+    
 def load_json(repo_url, json_path):
     url = f"{repo_url}/raw/main/{json_path}"
     response = requests.get(url)
@@ -65,8 +117,8 @@ def comb_tags(tags, operators_data, input_tags, debug=False, manual=True):
                                 tag2_index == 1 and \
                                 input_tags[tag3_index] == 28 and \
                                 manual == True:
-                                log_it("Recruitment manual senior op!")
-                                raise ValueError('manual senior op')
+                            log_it("Recruitment manual senior op!")
+                            raise ValueError('manual senior op')
                         if tag1_index == 0 and \
                                 tag2_index == 1 and \
                                 input_tags[tag3_index] == 29:
@@ -146,7 +198,7 @@ def get_tags(operators_data, tags, user_tags):
     discrepancies = []
     def get_tag_index(tag):
         try:
-            return tags_parse[tags_parse['Tag'] == tag].index[0]
+            return tags_parse[tags_parse['Tag'].str.lower() == tag.lower()].index[0]
         except IndexError:
             discrepancies.append(tag)
             return None
@@ -176,17 +228,26 @@ def get_tags(operators_data, tags, user_tags):
     except:
         return 'X'
 
-def click_tags(moveTo_x, moveTo_y, dragTo_x, dragTo_y, click_x, click_y, operators_data, tags):
+
+def get_ptoys(moveTo_x, moveTo_y, dragTo_x, dragTo_y):
     action_start('Arknights', 1242, 812, 339, 164)
     pyautogui.hotkey('win','shift','t')
-    time.sleep(1)
-
+    time.sleep(2)
     pyautogui.moveTo(moveTo_x, moveTo_y)
     pyautogui.mouseDown()
     pyautogui.moveTo(dragTo_x, dragTo_y, 1)
     time.sleep(.6)
     pyautogui.mouseUp()
-    time.sleep(5)
+    time.sleep(1)
+    pyautogui.click(x=1154, y=47)
+    time.sleep(.5)
+    action_start('Arknights', 1242, 812, 339, 164)
+    time.sleep(.5)
+    pyautogui.click(x=1152, y=944)
+    time.sleep(.1)
+
+def click_tags(moveTo_x, moveTo_y, dragTo_x, dragTo_y, click_x, click_y, operators_data, tags):
+    get_ptoys(moveTo_x, moveTo_y, dragTo_x, dragTo_y)
 
     action_start('Arknights', 1242, 812, 339, 164)
     text = pyperclip.paste()
@@ -194,20 +255,12 @@ def click_tags(moveTo_x, moveTo_y, dragTo_x, dragTo_y, click_x, click_y, operato
         pyautogui.click(x=click_x, y=click_y)
         time.sleep(1)
         
-        action_start('Arknights', 1242, 812, 339, 164)
-        pyautogui.hotkey('win','shift','t')
-        time.sleep(1)
+        get_ptoys(698, 578, 1173, 701)
         
-        pyautogui.moveTo(698, 578)
-        pyautogui.mouseDown()
-        pyautogui.moveTo(1173, 701, 1)
-        time.sleep(.6)
-        pyautogui.mouseUp()
-        time.sleep(1)
-        
-        action_start('Arknights', 1242, 812, 339, 164)
         input_tags = pyperclip.paste()
         input_tags = normalize(input_tags)
+        input_tags = normalize_tags(input_tags)
+        log_it(f'Tags: {input_tags}')
         input_tags = get_tags(operators_data, tags, input_tags)
         if '0' in input_tags:
             pyautogui.click(x=775, y=608)
@@ -250,7 +303,13 @@ def big_out():
     
 def log_it(name):
     print(name)
-    log_dir = r'C:\Users\User\Desktop\ark\logs'
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    # Determine the parent directory of the script directory
+    parent_dir = os.path.dirname(script_dir)
+    
+    # Define the log directory in the parent directory
+    log_dir = os.path.join(parent_dir, 'logs')
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)
     
@@ -301,6 +360,8 @@ def start_farm():
     pyautogui.click(x=1400, y=722)
 
 def drag_down():
+    action_start('Arknights', 1242, 812, 339, 164)
+    pyautogui.click(x=400, y=919)
     pyautogui.moveTo(1550, 953) # move rest
     pyautogui.mouseDown()
     pyautogui.moveTo(1550, 218, 1)

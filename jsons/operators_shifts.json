@@ -1,0 +1,62 @@
+[
+    {
+        "name": "Center",
+        "position": ["Mlynar", "Delphi", "Nearl", "Reed", "Coldsh"]
+    },
+    {
+        "name": "Reception",
+        "position": ["Ines", "Ch'en"]
+    },
+    {
+        "name": "Trade 1",
+        "position": ["Morgan", "Proviso", "Siege"]
+    },
+    {
+        "name": "Trade 2",
+        "position": ["Shamar", "Tequila", "Bibeak"]
+    },
+    {
+        "name": "Power 1",
+        "position": ["Liskar"]
+    },
+    {
+        "name": "Fac 1",
+        "position": ["Minimal", "Rosmon", "Waai"]
+    },
+    {
+        "name": "Fac 2",
+        "position": ["Passen", "Weedy", "Eunec"]
+    },
+    {
+        "name": "Power 2",
+        "position": ["Greyy"]
+    },
+    {
+        "name": "Fac 3",
+        "position": ["Bryoph", "Gravel", "Haze"]
+    },
+    {
+        "name": "Power 3",
+        "position": ["Grey"]
+    },
+    {
+        "name": "Fac 4",
+        "position": ["Scene", "Ceobe", "Verme"]
+    },
+    {
+        "name": "Dorm 1",
+        "position": ["Tomi", "Czer", "Lance", "Shini", "Convi"]
+    },
+    {
+        "name": "Dorm 2",
+        "position": ["Sail", "Iris", "April", "Virtu", "Farto"]
+    },
+    {
+        "name": "Dorm 3",
+        "position": ["Zima", "Myrt", "Sora", "Lumen", "Amiya"]
+    },
+    {
+        "name": "Dorm 4",
+        "position": ["Nighti", "Penan", "Ambri", "Durin", "Fiamm"]
+    }
+]
