@@ -21,5 +21,6 @@ Recruitment should ignore slots with 'Top Operator', 'Senior Operator' and 'Robo
 - Something else I didn't see coming because I'm not a god coder. God bless ChatGPT.
 ## To Do
 - ~Somehow make PowerToys more consistent and code it to search for operators when filling work. That would bypass the need to be precise with operator picking, allow to make second shift and ignore more operators joining roster and messing up macro spacing.~ done
+- add second shift and make Whisperain work
 - Merge 0_start and 1_start.
 - Make the whole thing more modular, so one doesn't have to code from scratch to do anything. in progress
