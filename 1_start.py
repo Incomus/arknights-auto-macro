@@ -75,7 +75,7 @@ def general_end():
     elif weekday == 777:
         subprocess.run(["python", "-m", "arknights-auto-macro.game.farm.event"], env=env)
         tm.sleep(1)
-    # new arknights day starts for me at 14 am, at 2 am I run last farm of the day
+    # new arknights day starts for me at 2 pm, at 2 am I run last farm of the day
     # as such it is better to run all farms and then collect mission for their better completion
     if datetime.time(1, 00) <= datetime.datetime.now().time() <= datetime.time(14, 00): 
         subprocess.run(["python", "-m", "arknights-auto-macro.game.main.credit"], env=env)
