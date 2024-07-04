@@ -6,6 +6,8 @@ import os
 import keyboard
 
 def rest_dorm(op_path, op_data, op):
+    pyautogui.click(x=836, y=931)
+    time.sleep(.6)
     base.switch_morale()
     base.switch_skill()
     current_page = 0
