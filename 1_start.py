@@ -7,14 +7,10 @@ import sys
 import traceback
 
 
-<<<<<<< HEAD
 event = True
 red_cred = False
 event_ignore = '0'
 
-=======
-event = True # if event is running it's generally prefered to farm that event instead
->>>>>>> 6bd3b16775d4274ca6505ca9ae00b06d6618ab92
 if len(sys.argv) > 1:
     week_schedule = sys.argv[1]
 else:
@@ -72,29 +68,16 @@ def general_end():
     ark.run_with_error_handling(["python", "-m", "arknights-auto-macro.game.base.exit"], env=env)
     tm.sleep(1)
     weekday = datetime.datetime.now().weekday()
-    # this is a little unreliable. my time zone is switching arknights day at 2 pm and neither do I have any actions between 12 am - 1 am
-    # god (chatgpt) help you if your time zone is switching at 12 am or you want to run between 12 to 1 am
     if datetime.time(1, 00) <= datetime.datetime.now().time() <= datetime.time(14, 00):
         weekday = weekday - 1
         if weekday < 0:
             weekday = 6
-    if event == True: # if event is running it's generally prefered to farm that event instead
+    if event == True:
         weekday = 777
-<<<<<<< HEAD
     elif red_cred == True:
         weekday = 888
     if weekday in [0, 3, 5, 6]:
         ark.run_with_error_handling(["python", "-m", "arknights-auto-macro.game.farm.RC_120"], env=env)
-=======
-    if weekday in [0, 3, 5, 6]: # setup your own schedule here
-        subprocess.run(["python", "-m", "arknights-auto-macro.game.farm.RC_120"], env=env)
-        tm.sleep(1)
-    elif weekday == 1:
-        subprocess.run(["python", "-m", "arknights-auto-macro.game.farm.agg_120"], env=env)
-        tm.sleep(1)
-    elif weekday == 2:
-        subprocess.run(["python", "-m", "arknights-auto-macro.game.farm.fib_120"], env=env)
->>>>>>> 6bd3b16775d4274ca6505ca9ae00b06d6618ab92
         tm.sleep(1)
     elif weekday == 4:
         # ark.run_with_error_handling(["python", "-m", "arknights-auto-macro.game.farm.chip_med_def"], env=env)
@@ -118,15 +101,8 @@ def general_end():
     elif weekday == 888:
         ark.run_with_error_handling(["python", "-m", "arknights-auto-macro.game.farm.RC_120"], env=env)
         tm.sleep(1)
-<<<<<<< HEAD
     if datetime.time(1, 00) <= datetime.datetime.now().time() <= datetime.time(14, 00):
         ark.run_with_error_handling(["python", "-m", "arknights-auto-macro.game.main.credit"], env=env)
-=======
-    # new arknights day starts for me at 2 pm, at 2 am I run last farm of the day
-    # as such it is better to run all farms and then collect mission for their better completion
-    if datetime.time(1, 00) <= datetime.datetime.now().time() <= datetime.time(14, 00): 
-        subprocess.run(["python", "-m", "arknights-auto-macro.game.main.credit"], env=env)
->>>>>>> 6bd3b16775d4274ca6505ca9ae00b06d6618ab92
         tm.sleep(1)
         ark.run_with_error_handling(["python", "-m", "arknights-auto-macro.game.main.mission"], env=env)
         tm.sleep(1)
@@ -174,14 +150,9 @@ def work():
     tm.sleep(1)    
     general_end()
 
-<<<<<<< HEAD
 def rest_main():
     general_start()
     ark.run_with_error_handling(["python", "-m", "arknights-auto-macro.game.base.rest_main"], env=env)
-=======
-def rest(): # this should run 6 hours after work out
-    subprocess.run(["python", "-m", "arknights-auto-macro.record_start"], env=env)
->>>>>>> 6bd3b16775d4274ca6505ca9ae00b06d6618ab92
     tm.sleep(1)
     ark.run_with_error_handling(["python", "-m", "arknights-auto-macro.game.base.collect"], env=env)
     tm.sleep(1)
