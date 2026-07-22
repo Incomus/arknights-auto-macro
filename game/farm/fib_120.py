@@ -16,7 +16,7 @@ time.sleep(10)
 
 ark.action_start('Arknights', 1242, 812, 339, 164)
 ark.start_farm()
-time.sleep(750)
+time.sleep(250)
 
 ark.action_start('Arknights', 1242, 812, 339, 164)
 ark.big_out()

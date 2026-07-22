@@ -12,6 +12,11 @@ import sys
 import win32gui
 import win32con
 import pywinauto
+import difflib
+import psutil
+import pandas as pd
+import subprocess
+import traceback
 
 class WindowMgr:
     def __init__(self):
@@ -43,15 +48,20 @@ class WindowMgr:
 
 
 def action_start(title, resize_x, resize_y, move_x, move_y):
+    if title == "Arknights":
+        resize_x = 1319 #1242
+        resize_y = 812
+        move_x = 269 #339
+        move_y = 160 #164
     try:
-        app = pywinauto.Application().connect(found_index=0, title_re=title)
-        main_window = app.window(title_re=title)
-        main_window.set_focus()
-        time.sleep(.5)
-        w = WindowMgr() ##
-        w.find_window_wildcard(title) ##
+        w = WindowMgr()
+        w.find_window_wildcard(title)
+        
+        win32gui.ShowWindow(w._handle, win32con.SW_RESTORE)
+        win32gui.SetForegroundWindow(w._handle)
+        
         win32gui.MoveWindow(w._handle, move_x, move_y, resize_x, resize_y, True)
-        time.sleep(.5)
+        time.sleep(0.5)
         return w
     except Exception as e:
         print(f"Error action_start: {title}, {e}")
@@ -63,6 +73,8 @@ def normalize(text):
     text = text.replace('\n', ',').replace('\r', ',').replace(',,', ',')
     text = text.split(',')
     text = ["Mlynar" if "mkynar" in x.lower() else x for x in text]
+    text = ["Zima" if "tima" in x.lower() else x for x in text]
+    text = ["Greyy" if "grew" in x.lower() else x for x in text]
     try:
         for element in text:
             if element in ['', ' ']:
@@ -71,10 +83,32 @@ def normalize(text):
         x = None
     return text
 
-def normalize_tags(text):
-    text = ["Ranged" if x.lower() == "ringed" else x for x in text]
-    text = ['' if x in [' ', '•'] else x for x in text]
-    return text
+def normalize_tags(text, possible_inputs):
+    normalized_text = []
+    
+    for phrase in text:
+        # Split the phrase into individual words
+        words = phrase.split()
+        print(words)
+        for word in words:
+            # Clean the word
+            word_cleaned = word.replace(' ', '').replace('•', '').replace('.', '').lower()
+            print(word_cleaned)
+            # Find the closest match from possible_inputs
+            match = difflib.get_close_matches(word_cleaned, [x.lower() for x in possible_inputs], n=1, cutoff=0.6)
+            print(match)
+            if match:
+                # Find the original case-sensitive match in possible_inputs
+                original_match = next((x for x in possible_inputs if x.lower() == match[0]), word)
+                normalized_text.append(original_match)
+            else:
+                # Handle case where no close match is found (optional)
+                normalized_text.append(None)  # You can also choose to append the original word or skip it
+    normalized_text = [word for word in normalized_text if word is not None]
+    return normalized_text
+    
+    
+
     
 def load_json(repo_url, json_path):
     url = f"{repo_url}/raw/main/{json_path}"
@@ -234,12 +268,18 @@ def get_ptoys(moveTo_x, moveTo_y, dragTo_x, dragTo_y):
     pyautogui.hotkey('win','shift','t')
     time.sleep(2)
     pyautogui.moveTo(moveTo_x, moveTo_y)
+    time.sleep(.6)
     pyautogui.mouseDown()
+    time.sleep(.6)
+    pyautogui.mouseDown()
+    time.sleep(.6)
     pyautogui.moveTo(dragTo_x, dragTo_y, 1)
     time.sleep(.6)
     pyautogui.mouseUp()
+    time.sleep(.6)
+    pyautogui.mouseUp()
     time.sleep(1)
-    pyautogui.click(x=1154, y=47)
+    pyautogui.click(x=1435, y=36)
     time.sleep(.5)
     action_start('Arknights', 1242, 812, 339, 164)
     time.sleep(.5)
@@ -247,36 +287,61 @@ def get_ptoys(moveTo_x, moveTo_y, dragTo_x, dragTo_y):
     time.sleep(.1)
 
 def click_tags(moveTo_x, moveTo_y, dragTo_x, dragTo_y, click_x, click_y, operators_data, tags):
+    action_start('Arknights', 1242, 812, 339, 164)
     get_ptoys(moveTo_x, moveTo_y, dragTo_x, dragTo_y)
-
     action_start('Arknights', 1242, 812, 339, 164)
     text = pyperclip.paste()
-    if not any(x in text for x in ['H', 'a', 'n', 'l', 'x', 'p', 'd']):
+    if not any(x in text.lower() for x in ['h', 'a', 'l', 'x', 'p', 'd']):
         pyautogui.click(x=click_x, y=click_y)
         time.sleep(1)
-        
-        get_ptoys(698, 578, 1173, 701)
-        
-        input_tags = pyperclip.paste()
-        input_tags = normalize(input_tags)
-        input_tags = normalize_tags(input_tags)
-        log_it(f'Tags: {input_tags}')
-        input_tags = get_tags(operators_data, tags, input_tags)
-        if '0' in input_tags:
-            pyautogui.click(x=775, y=608)
-            time.sleep(.6)
-        if '1' in input_tags:
-            pyautogui.click(x=781, y=676)
-            time.sleep(.6)
-        if '2' in input_tags:
-            pyautogui.click(x=928, y=601)
-            time.sleep(.6)
-        if '3' in input_tags:
-            pyautogui.click(x=935, y=678)
-            time.sleep(.6)
-        if '4' in input_tags:
-            pyautogui.click(x=1095, y=605)
-            time.sleep(.6)
+        repeat = 0
+        while True:
+            if repeat > 5:
+                break
+            get_ptoys(698, 578, 1173, 701)
+            
+            input_tags = pyperclip.paste()
+            input_tags = normalize(input_tags)
+            input_tags = normalize_tags(input_tags, tags[2:])
+            log_it(f'Tags: {input_tags}')
+            input_tags = get_tags(operators_data, tags, input_tags)
+            result = False
+            if input_tags == 'X':
+                break
+            if '0' in input_tags:
+                pyautogui.click(x=775, y=608)
+                time.sleep(.6)
+                result = True
+            if '1' in input_tags:
+                pyautogui.click(x=781, y=676)
+                time.sleep(.6)
+                result = True
+            if '2' in input_tags:
+                pyautogui.click(x=928, y=601)
+                time.sleep(.6)
+                result = True
+            if '3' in input_tags:
+                pyautogui.click(x=935, y=678)
+                time.sleep(.6)
+                result = True
+            if '4' in input_tags:
+                pyautogui.click(x=1095, y=605)
+                time.sleep(.6)
+                result = True
+            if not result:
+                text_prev = pyperclip.paste()
+                get_ptoys(1224, 669, 1337, 695)
+                text = pyperclip.paste()
+                if any(x in text.lower() for x in ['p', 'e', 'f', 's']) and text != text_prev:
+                    pyautogui.click(x=1274, y=628)
+                    time.sleep(.6)
+                    pyautogui.click(x=1113, y=714)
+                    time.sleep(1)
+                else:
+                    break
+            else:
+                break
+            repeat += 1
         if input_tags != 'X':
             pyautogui.click(x=782, y=521)
             time.sleep(.6)
@@ -287,64 +352,51 @@ def click_tags(moveTo_x, moveTo_y, dragTo_x, dragTo_y, click_x, click_y, operato
         time.sleep(9)
     time.sleep(1)
     
-def big_out():
+def big_out(count=10, click=True):
     action_start('Arknights', 1242, 812, 339, 164)
-    count = 10
     while count > 0:
-        time.sleep(.6)
+        time.sleep(2)
         keyboard.press_and_release('esc')
         count = count - 1
     action_start('Arknights', 1242, 812, 339, 164)
-    count = 5
-    while count > 0:
-        time.sleep(.6)
-        pyautogui.click(x=769, y=713)
-        count = count - 1
+    if click:
+        count = 5
+        while count > 0:
+            time.sleep(.6)
+            pyautogui.click(x=769, y=713)
+            count = count - 1
     
 def log_it(name):
-    print(name)
-    script_dir = os.path.dirname(os.path.abspath(__file__))
+    try:
+        print(name)
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        
+        # Determine the parent directory of the script directory
+        parent_dir = os.path.dirname(script_dir)
+        
+        # Define the log directory in the parent directory
+        log_dir = os.path.join(parent_dir, 'logs')
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)
+        
+        log_file = os.path.join(log_dir, 'ark_log.log')
+        
+        # Create the log entry manually
+        log_entry = f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - {name}\n"
+        
+        # Append the new log entry to the log file
+        with open(log_file, 'a', encoding='utf-8') as file:
+            file.write(log_entry)
     
-    # Determine the parent directory of the script directory
-    parent_dir = os.path.dirname(script_dir)
-    
-    # Define the log directory in the parent directory
-    log_dir = os.path.join(parent_dir, 'logs')
-    if not os.path.exists(log_dir):
-        os.makedirs(log_dir)
-    
-    log_file = os.path.join(log_dir, 'ark_log.log')
-    
-    # Create the log entry manually
-    log_entry = f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - {name}\n"
-    
-    # Read the current content of the log file
-    if os.path.exists(log_file):
-        with open(log_file, 'r') as file:
-            old_content = file.read()
-    else:
-        old_content = ""
-    
-    # Write the new log entry followed by the old content
-    with open(log_file, 'w') as file:
-        file.write(log_entry + old_content)
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 def resource_menu():
     action_start('Arknights', 1242, 812, 339, 164)
     time.sleep(.6)
     pyautogui.click(x=1311, y=843)
     time.sleep(10)
-    count = 2
-    while count > 0:
-        action_start('Arknights', 1242, 812, 339, 164)
-        pyautogui.moveTo(1530, 873)
-        pyautogui.mouseDown()
-        pyautogui.moveTo(1062, 897, 1)
-        time.sleep(.6)
-        pyautogui.mouseUp()
-        time.sleep(1)
-        count = count - 1
-    pyautogui.click(x=1400, y=527)
+    pyautogui.click(x=1555, y=523)
     time.sleep(1)
     pyautogui.click(x=604, y=879)
     time.sleep(1)
@@ -365,6 +417,16 @@ def drag_down():
     pyautogui.moveTo(1550, 953) # move rest
     pyautogui.mouseDown()
     pyautogui.moveTo(1550, 218, 1)
+    time.sleep(1)
+    pyautogui.mouseUp()
+    time.sleep(.6)
+
+def drag_from_to(x1, y1, x2, y2):
+    action_start('Arknights', 1242, 812, 339, 164)
+    #pyautogui.click(x=400, y=919)
+    pyautogui.moveTo(x1, y1) # move rest
+    pyautogui.mouseDown()
+    pyautogui.moveTo(x2, y2, 1)
     time.sleep(1)
     pyautogui.mouseUp()
     time.sleep(.6)
@@ -442,4 +504,49 @@ def validate_google_play_games_path(path):
             return False
     return True
 
+def enum_windows_callback(hwnd, explorer_windows):
+    window_text = win32gui.GetWindowText(hwnd)
+    class_name = win32gui.GetClassName(hwnd)
+    if class_name == "CabinetWClass":  # This is the class name for Windows Explorer windows
+        explorer_windows.append(hwnd)
+
+def close_explorer_windows():
+    explorer_windows = []
+    win32gui.EnumWindows(enum_windows_callback, explorer_windows)
+
+    if explorer_windows:
+        for hwnd in explorer_windows:
+            win32gui.PostMessage(hwnd, win32con.WM_CLOSE, 0, 0)
+
+def kill_w_name(name):
+    for proc in psutil.process_iter(['pid', 'name']):
+        try:
+            # Check if 'powertoys' (lowercase) is in the process name (converted to lowercase)
+            if name.lower() in proc.info['name'].lower():
+                print(f"Killing {proc.info['name']} with PID {proc.info['pid']}")
+                os.system(f"taskkill /F /PID {proc.info['pid']}")
+        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+            # Handle errors if a process no longer exists or cannot be accessed
+            pass
+    time.sleep(10)
+
+def print_process():
+    process_list = []
+    for proc in psutil.process_iter(['pid', 'name']):
+        process_list.append(proc.info)
+
+    # Converting the list of processes into a DataFrame
+    df = pd.DataFrame(process_list)
+
+    # Sorting the DataFrame by the 'name' column
+    df_sorted = df.sort_values(by='name')
+
+    # Displaying the sorted DataFrame
+    print(df_sorted)
+
+def run_with_error_handling(command, env):
+    try:
+        subprocess.run(command, env=env)
+    except Exception:
+        ark.log_it(traceback.format_exc())
 

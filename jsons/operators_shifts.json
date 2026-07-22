@@ -1,11 +1,11 @@
 [
     {
         "name": "Center",
-        "position": ["Mlynar", "Delphi", "Nearl", "Reed", "Coldsh"]
+        "position": ["Mlynar", "Delphi", "Nearl", "Exec", "Coldsh"]
     },
     {
         "name": "Reception",
-        "position": ["Ines", "Ch'en"]
+        "position": ["Ines", "Ch"]
     },
     {
         "name": "Trade 1",
@@ -25,11 +25,15 @@
     },
     {
         "name": "Fac 2",
-        "position": ["Passen", "Weedy", "Eunec"]
+        "position": ["Purest", "Weedy", "Eunec"]
     },
     {
         "name": "Power 2",
         "position": ["Greyy"]
+    },
+    {
+        "name": "Office",
+        "position": ["Whisp"]
     },
     {
         "name": "Fac 3",
@@ -40,20 +44,24 @@
         "position": ["Grey"]
     },
     {
+        "name": "Trade 3",
+        "position": ["Eben", "Arch", "Vigi"]
+    },
+    {
         "name": "Fac 4",
-        "position": ["Scene", "Ceobe", "Verme"]
+        "position": ["Purest", "Ceobe", "Verme"]
     },
     {
         "name": "Dorm 1",
-        "position": ["Tomi", "Czer", "Lance", "Shini", "Convi"]
+        "position": ["Tomi", "Lance", "Virtu", "Iris", "Czer"]
     },
     {
         "name": "Dorm 2",
-        "position": ["Sail", "Iris", "April", "Virtu", "Farto"]
+        "position": ["Convi", "Sail", "Iris", "April", "Virtu"]
     },
     {
         "name": "Dorm 3",
-        "position": ["Zima", "Myrt", "Sora", "Lumen", "Amiya"]
+        "position": ["Farto", "Zima", "Myrt", "Lumen", "Amiya"]
     },
     {
         "name": "Dorm 4",

@@ -17,7 +17,7 @@ op_data = base.read_json(op_path)
 
 base.open_work()
 ark.drag_down()
-base.open_dorm_1()
+base.open_dorm1()
 current_page = 0
 base.switch_skill()
 op_data, current_page = base.click_op(op_path, op_data, current_page, 'Siege')
@@ -68,6 +68,9 @@ base.fill_base(shift_data, op_path, op_data, 'Power 2')
 base.open_dorm2()
 base.fill_base(shift_data, op_path, op_data, 'Dorm 2')
 
+base.office()
+base.fill_base(shift_data, op_path, op_data, 'Office')
+
 base.open_fac3()
 base.fill_base(shift_data, op_path, op_data, 'Fac 3')
 
@@ -77,7 +80,7 @@ base.open_power3()
 base.fill_base(shift_data, op_path, op_data, 'Power 3')
 
 base.open_fac4()
-base.fill_base(shift_data, op_path, op_data, 'Fac 4')
+base.fill_base(shift_data, op_path, op_data, 'Trade 3')
 
 base.open_dorm3()
 base.fill_base(shift_data, op_path, op_data, 'Dorm 3')

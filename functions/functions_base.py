@@ -34,9 +34,9 @@ def shuffle(repeat, direction=True):
         pyautogui.click(x=666, y=450)
         if direction == True:
             time.sleep(.6)
-            pyautogui.moveTo(1538, 600)
+            pyautogui.moveTo(1338, 600)
             pyautogui.mouseDown()
-            pyautogui.moveTo(667, 600, 1)
+            pyautogui.moveTo(455, 600, 1)
             time.sleep(1)
             pyautogui.mouseUp()
             time.sleep(.6)
@@ -46,7 +46,7 @@ def shuffle(repeat, direction=True):
             pos = int((1538 + 667) / 2)
             pyautogui.moveTo(pos, 600)
             pyautogui.mouseDown()
-            pyautogui.moveTo(1538, 600, 1)
+            pyautogui.moveTo(1544, 600, 1)
             time.sleep(1)
             pyautogui.mouseUp()
             time.sleep(.6)
@@ -54,7 +54,7 @@ def shuffle(repeat, direction=True):
             pos = int((1538 + 667 + 1) / 2)
             pyautogui.moveTo(pos, 600)
             pyautogui.mouseDown()
-            pyautogui.moveTo(1538, 600, 1)
+            pyautogui.moveTo(1544, 600, 1)
             time.sleep(1)
             pyautogui.mouseUp()
             time.sleep(.6)
@@ -124,6 +124,10 @@ def open_power2():
     pyautogui.click(x=988, y=465) ## power2
     time.sleep(1)
     
+def office():
+    pyautogui.click(x=988, y=773) ## office
+    time.sleep(1)
+    
 def open_fac3():
     pyautogui.click(x=991, y=950) ## fac3 gold
     time.sleep(1)
@@ -147,7 +151,7 @@ def switch_morale():
 def confirm_shift():
     pyautogui.click(x=1470, y=932)
     time.sleep(1)
-    pyautogui.click(x=1540, y=931)
+    pyautogui.click(x=1055, y=927)
     time.sleep(9)
 
 def transform_number(n):
@@ -159,17 +163,74 @@ def transform_number(n):
         second_n = 0
     return [first_n, second_n]
 
+def generate_op_positions(op_position, x, ex=False):
+    # Initialize the original position and empty lists for positions behind and forward
+    final_list = [op_position]
+    behind_positions = []
+    forward_positions = []
+    
+    current_position = op_position[:]  # Copy the original position
+    first_num, second_num = current_position[0], current_position[1]
+    test = 0
+    # Calculate positions behind the original position
+    fn_var = first_num
+    sn_var = second_num
+    count = 0
+    if ex == False:
+        times = x // 2
+    else:
+        times = x
+    while not (fn_var == 0 and sn_var == 1) and count < times:
+        print(f'passed: not (fn_var == 0 ({fn_var, fn_var == 0}) and sn_var == 1 ({sn_var, sn_var == 1})) and count < times {count, times, count < times}')
+        if sn_var > 1:
+            print(f'{sn_var} is sn_var > 1')
+            sn_var -= 1
+            print(f'sn_var now {sn_var}')
+            behind_positions.append([fn_var, sn_var])
+            print(f'added {[fn_var, sn_var]}')
+        else:
+            print(f'{sn_var} is not sn_var > 1')
+            sn_var += 11
+            print(f'sn_var now {sn_var}')
+            fn_var -= 1
+            print(f'fn_var now {fn_var}')
+            behind_positions.append([fn_var, sn_var])
+            print(f'added {[fn_var, sn_var]}')
+        count += 1
+    x -= count
+    fn_var = first_num
+    sn_var = second_num
+    if ex == False:
+        while x > 0:
+            if sn_var < 12:
+                sn_var += 1
+                forward_positions.append([fn_var, sn_var])
+            else:
+                sn_var -= 11
+                fn_var += 1
+                forward_positions.append([fn_var, sn_var])
+            x -= 1
+    while forward_positions or (ex == True and behind_positions):
+        if ex == False:
+            final_list.append(forward_positions.pop(0))
+        if behind_positions:
+            final_list.append(behind_positions.pop(0))
+    return final_list
+
 def click_op(file_path, op_data, current_page, name, ex=False):
     op_position = get_position(op_data, name)
+    if name == 'Grey':
+        name = 'Fris'
+    if name == 'Vigi':
+        name = 'Kira'
     if op_position == None:
         op_data.append({"name": name, "position": [0, 1]})
         op_position = get_position(op_data, name)
-    source_position = op_position
-    repeat = 15
-    iteration = 0
+    source_position = op_position.copy()
+    repeat = 6
     if ex != False:
         ark.action_start('Arknights', 1242, 812, 339, 164)
-        count = 12
+        count = 17
         while count > 0:
             pyautogui.moveTo(1550, 387)
             pyautogui.mouseDown()
@@ -178,18 +239,21 @@ def click_op(file_path, op_data, current_page, name, ex=False):
             time.sleep(.6)
             count = count - 1
         time.sleep(1)
+        op_position[0] = 0
         op_position[1] = 12
         current_page = op_position[0]
-    while repeat > 0:
-        current_page = right_shuffle(op_position[0], current_page)
-        op_pos = transform_number(op_position[1])
+    positions = generate_op_positions(op_position, repeat, ex)
+    for position in positions:
+        current_page = right_shuffle(position[0], current_page)
+        op_pos = transform_number(position[1])
         moveTo_x = 750 + 138 * (op_pos[0] - 1)
         if op_pos[1] == 0:
             moveTo_y = 551
         else:
             moveTo_y = 820
-        dragTo_x = moveTo_x + 120
-        dragTo_y = moveTo_y + 21
+        dragTo_x = moveTo_x + 128
+        dragTo_y = moveTo_y + 25
+        pyperclip.copy('#')
         ark.get_ptoys(moveTo_x, moveTo_y, dragTo_x, dragTo_y)
         text = pyperclip.paste()
         try:
@@ -198,48 +262,35 @@ def click_op(file_path, op_data, current_page, name, ex=False):
         except:
             text = 'Nope lol'
         if name.lower() in text.lower():
+            if name in ['Fris', 'Kira']:
+                if position[1] - 1 < 1:
+                    position[0] -= 1
+                    position[1] = 12
+                else:
+                    position[1] -= 1
+                current_page = right_shuffle(position[0], current_page)
+                op_pos = transform_number(position[1])
+                moveTo_x = 750 + 138 * (op_pos[0] - 1)
+                if op_pos[1] == 0:
+                    moveTo_y = 551
+                else:
+                    moveTo_y = 820
             pyautogui.click(x=moveTo_x, y=moveTo_y)
             time.sleep(0.6)
-            if ex == False:
+            if ex != False:
+                position = source_position
+            if ex == False and source_position != position:
+                if name == 'Fris':
+                    name = 'Grey'
+                if name == 'Kira':
+                    name = 'Vigi'
                 for entry in op_data:
                     if entry['name'] == name:
-                        entry['position'] = op_position
+                        entry['position'] = position
+                ark.log_it(f'Rewritten position {position}, for {name}')
                 write_json(file_path, op_data)
             return op_data, current_page
-        if name.lower() == 'grey' and 'lightn' in text.lower():
-            pyautogui.click(x=moveTo_x, y=moveTo_y)
-            time.sleep(0.6)
-            for entry in op_data:
-                if entry['name'] == name:
-                    entry['position'] = op_position
-            write_json(file_path, op_data)
-            return op_data, current_page
-        ark.log_it(f'At page {op_position[0]} position {op_position[1]}, [{name}] not in [{text}]')
-        iteration += 1
-        if ex == False:
-            if iteration % 2 == 0:
-                op_position[1] -= iteration
-            else:
-                op_position[1] += iteration
-            while op_position[1] > 12:
-                op_position[1] -= 12
-                op_position[0] += 1
-            while op_position[1] < 1:
-                op_position[1] += 12
-                op_position[0] -= 1
-            if op_position[0] < 0:
-                op_position[1] += 2 * iteration - 12
-                op_position[0] += 1
-                while op_position[1] > 12:
-                    op_position[1] -= 12
-                    op_position[0] += 1
-        else:
-            op_position[1] -= 1
-            while op_position[1] < 1:
-                op_position[1] += 12
-                op_position[0] -= 1
-            
-        repeat -= 1
+        ark.log_it(f'At page {position[0]} position {position[1]}, [{name}] not in [{text}]')
     ark.log_it('Failed to match operator')
     return op_data, current_page
 

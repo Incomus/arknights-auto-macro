@@ -12,59 +12,59 @@ import win32gui
 import pywinauto
 import json
 import sys
+import difflib
+import psutil
+import pandas as pd
+import traceback
+pd.set_option('display.max_rows', None)
 
-#print(gw.getAllTitles())
-#try:
-#    w = pyautogui.getWindowsWithTitle('Google Play Games')[0]
-#    w.activate()
-#    w.restore()
-#    w.resizeTo(1750, 900)
-#except:
-#    print('lolno')
-#    input()
+# Collecting process information
+# ark.drag_from_to(1057, 922, 1057, 506)
+# time.sleep(0.5)
+# pyautogui.click(x=1275, y=839)
+# time.sleep(0.5)
+# ark.drag_from_to(1027, 842, 1015, 714)
+# time.sleep(0.5)
+def restart_gplay(times):
+    while times > 0:
+        os.system("taskkill /f /im client.exe")
+        os.system("taskkill /f /im crosvm.exe")
+        os.system("taskkill /f /im Service.exe")
+        time.sleep(5)
+        try:
+            subprocess.Popen(["Bootstrapper.exe"])
+            time.sleep(10)
+        except:
+            x = None
+        times -= 1
 
-#def winEnumHandler( hwnd, ctx ):
-#    if win32gui.IsWindowVisible( hwnd ):
-#        print ( hex( hwnd ), win32gui.GetWindowText( hwnd ) )
-#win32gui.EnumWindows( winEnumHandler, None )
+#pyautogui.click(x=959, y=510, clicks=1000, interval=0.01)
+#restart_gplay(3)
+try:
+    ark.action_start('Arknights', 1319, 812, 262, 155)
+except:
+    print('cant open ark')
 
-#pyautogui.click(x=1750, y=900)
-#ark.action_start('Google Play', 1750, 900, 85, 120)
-#ark.action_start('Arknights', 1242, 812, 339, 164)
-#pyautogui.click(x=1152, y=944)
-#ark.get_ptoys(750, 551, 880, 572)
-#time.sleep(2)
-#ark.drag_down()
-#subprocess.Popen(['start', 'googleplaygames://launch/?id=com.YoStarEN.Arknights'], shell=True)
+
+#ark.get_ptoys(698, 578, 1173, 701)
+#ark.kill_w_name('Powertoys')
+#pyautogui.click(x=953, y=471)
+#ark.action_start('4G LTE', 1367, 958, 276, 76)
+#ark.action_start('OBS', 1367, 958, 276, 76)
+#ark.action_start('Arknights', 1319, 812, 262, 155)
+
+#pyautogui.moveTo(x=650, y=395)
+#pyautogui.click(x=1139, y=841)
+#time.sleep(10)
+
+
+
+
+    
+# Iterate over all running processes
+
+
 current_position = pyautogui.position()
-#time.sleep(2)
-
-# Print the current position
 print(f"The current position of the cursor is: {current_position}")
-#pyautogui.click(x=59, y=475)
-#os.system("taskkill /f /im client.exe")
-#w = gw.getWindowsWithTitle('Google Play')[0]
-#w.activate()Ambri
-#title = 'Google Play'
-#app = pywinauto.Application().connect(found_index=0, title_re=title)
-#main_window = app.window(title_re=title)
-#main_window.set_focus()
-#main_window.move_window(x=(1920-1750), y=(1200-900), width=85, height=120, repaint=True)
+
 print('done')
-#subprocess.run(["python", "-m", "ark.game.base.work_2traders"])
-#import os
-#import subprocess
-
-#env = os.environ.copy()
-#env["PYTHONPATH"] = r"C:\Users\User\Desktop\ark"
-
-#argument = '1'
-
-#subprocess.run(["python", "-m", "ark.test1", argument], env=env)
-#if datetime.time(0, 00) <= datetime.datetime.now().time() <= datetime.time(23, 00):
-#   print('sus')
-#    input()
-#else:
-#    print('ses')
-#    input()
-
